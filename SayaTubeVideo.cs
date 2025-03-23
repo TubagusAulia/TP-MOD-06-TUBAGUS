@@ -14,6 +14,11 @@ namespace tpmodul6_103022300141
 
         public SayaTubeVideo(string title)
         {
+            if (string.IsNullOrEmpty(title) || title.Length > 100)
+            {
+                throw new ArgumentException("Title must be between 1 and 100 characters.");
+            }
+
             Random random = new Random();
             this.id = random.Next(10000, 99999);
             this.title = title;
@@ -22,7 +27,22 @@ namespace tpmodul6_103022300141
 
         public void IncreasePlayCount(int count)
         {
-            this.playCount += count;
+            if (count > 10000000)
+            {
+                throw new ArgumentException("Play count increment cannot exceed 10,000,000.");
+            }
+
+            try
+            {
+                checked
+                {
+                    this.playCount += count;
+                }
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Overflow occurred while increasing play count.");
+            }
         }
 
         public void PrintVideoDetails()
